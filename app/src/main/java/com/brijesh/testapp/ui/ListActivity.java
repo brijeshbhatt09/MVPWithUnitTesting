@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.brijesh.testapp.R;
+import com.brijesh.testapp.utils.NetworkCheck;
 
 import butterknife.ButterKnife;
 
@@ -25,6 +26,9 @@ public class ListActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        /*intialize network class*/
+        NetworkCheck.initNetwork(getApplicationContext());
 
         /*Bind view this activity to butterknife*/
         ButterKnife.bind(this);
@@ -71,10 +75,8 @@ public class ListActivity extends AppCompatActivity
         {
             throw new IllegalArgumentException("Null fragment passed in " + TAG + "#replaceContentFragment");
         }
-
         /*getting the name of the fragment class*/
         String mFragmentName = ((Object) fragment).getClass().getSimpleName();
-
 
         /* replace with new content*/
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

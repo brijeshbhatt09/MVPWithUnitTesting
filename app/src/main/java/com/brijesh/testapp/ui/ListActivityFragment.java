@@ -17,12 +17,11 @@ import com.brijesh.testapp.model.ViewResponse;
 import com.brijesh.testapp.ui.adapter.DataViewAdapter;
 import com.brijesh.testapp.ui.interfaces.MainMVP;
 import java.util.ArrayList;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ${Vijay.K.Arora} on 11/12/18.
+ * Created by ${Brijesh.Bhatt} on 11/12/18.
  */
 public class ListActivityFragment extends Fragment implements MainMVP.View
 {
@@ -94,7 +93,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     /*intialize presenter object, attach view to presenter and call service to fetch data from server*/
     private void initPresenter()
     {
-        _presenter = new ListActivityPresenter(AppDataManager.getInstance(), this);
+        _presenter = new ListActivityPresenter(AppDataManager.getInstance(getContext()), this);
         _presenter.onAttach(this);
         _presenter.callWebService(URL);
     }
