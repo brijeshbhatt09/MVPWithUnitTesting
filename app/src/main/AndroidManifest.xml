@@ -2,11 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.brijesh.testapp">
 
-<!--Internet Permission required to make network calls-->
+
+    <!--Network Permission required to check Network-->
 
     <uses-permission
-        android:name="android.permission.INTERNET">
-    </uses-permission>
+        android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!--Internet Permission required to make network calls-->
+    <uses-permission
+        android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
