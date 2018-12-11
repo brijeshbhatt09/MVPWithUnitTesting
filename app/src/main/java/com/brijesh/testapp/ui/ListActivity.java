@@ -8,7 +8,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.brijesh.testapp.R;
-import com.brijesh.testapp.utils.NetworkCheck;
 
 import butterknife.ButterKnife;
 
@@ -26,9 +25,6 @@ public class ListActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
-
-        /*intialize network class*/
-        NetworkCheck.initNetwork(getApplicationContext());
 
         /*Bind view this activity to butterknife*/
         ButterKnife.bind(this);

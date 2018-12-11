@@ -10,13 +10,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.brijesh.testapp.R;
 import com.brijesh.testapp.data.AppDataManager;
 import com.brijesh.testapp.model.Rows;
 import com.brijesh.testapp.model.ViewResponse;
 import com.brijesh.testapp.ui.adapter.DataViewAdapter;
 import com.brijesh.testapp.ui.interfaces.MainMVP;
+
 import java.util.ArrayList;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -73,7 +76,6 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     public void onPause()
     {
         super.onPause();
-        _presenter.onDetach(this);
     }
 
     private void initView()
@@ -141,5 +143,6 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     public void onDestroy()
     {
         super.onDestroy();
+        _presenter.onDetach(this);
     }
 }

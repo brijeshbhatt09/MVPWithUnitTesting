@@ -27,7 +27,7 @@ public class ListActivityPresenter<V extends MainMVP.View> extends BasePresenter
         this._view = view;
     }
 
-    /*this method is called by attached view to get data from server*/
+    /*This method is called by attached view to get data from server*/
 
     @Override
     public void callWebService(String url)
