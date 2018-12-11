@@ -18,8 +18,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AppApiHelper implements ApiHelper
 {
-    private ApiRequest apiRequest;
-    private static AppApiHelper appApiHelper;
+    private ApiRequest _apiRequest;
+    private static AppApiHelper _appApiHelper;
+    private static final String Base_url = "https://dl.dropboxusercontent.com/";
+    private static final int TIME_OUT = 60;
 
 
     private AppApiHelper()
@@ -29,12 +31,12 @@ public class AppApiHelper implements ApiHelper
 
     public static AppApiHelper getInstance()
     {
-        if (appApiHelper == null)
+        if (_appApiHelper == null)
             {
-                appApiHelper = new AppApiHelper();
+                _appApiHelper = new AppApiHelper();
             }
 
-        return appApiHelper;
+        return _appApiHelper;
     }
 
     @Override
@@ -51,24 +53,24 @@ public class AppApiHelper implements ApiHelper
 
         Gson gson = new GsonBuilder().setLenient().create();
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .writeTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .readTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .addInterceptor(loggingInterceptor)
                 .build();
 
 
         return new Retrofit.Builder()
-                .baseUrl("https://dl.dropboxusercontent.com/")
+                .baseUrl(Base_url)
                 .client(okHttpClient).addConverterFactory(GsonConverterFactory.create(gson)).build();
     }
 
     public ApiRequest getApiRequest()
     {
-        if (apiRequest == null)
+        if (_apiRequest == null)
         {
-            apiRequest = apiClient().create(ApiRequest.class);
-            return apiRequest;
+            _apiRequest = apiClient().create(ApiRequest.class);
+            return _apiRequest;
         }
         return apiClient().create(ApiRequest.class);
     }

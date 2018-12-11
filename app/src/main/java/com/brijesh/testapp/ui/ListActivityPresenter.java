@@ -18,13 +18,13 @@ import retrofit2.Response;
 public class ListActivityPresenter<V extends MainMVP.View> extends BasePresenter<V> implements MainMVP.Presenter<V>
 {
 
-    DataManager dataManager;
-    MainMVP.View view;
+    DataManager _dataManager;
+    MainMVP.View _view;
 
     public ListActivityPresenter(DataManager dataManager, MainMVP.View view)
     {
-        this.dataManager = dataManager;
-        this.view = view;
+        this._dataManager = dataManager;
+        this._view = view;
     }
 
     /*this method is called by attached view to get data from server*/
@@ -32,25 +32,25 @@ public class ListActivityPresenter<V extends MainMVP.View> extends BasePresenter
     @Override
     public void callWebService(String url)
     {
-        view.showLoading();
+        _view.showLoading();
 
-        Call<ViewResponse> viewData = dataManager.getResponse(url);
+        Call<ViewResponse> viewData = _dataManager.getResponse(url);
         viewData.enqueue(new Callback<ViewResponse>()
         {
             @Override
             public void onResponse(Call<ViewResponse> call, Response<ViewResponse> response)
             {
-                view.hideLoading();
+                _view.hideLoading();
                 if(response != null && response.isSuccessful())
                 {
-                    view.updateResponse(response.body());
+                    _view.updateResponse(response.body());
                 }
             }
 
             @Override
             public void onFailure(Call<ViewResponse> call, Throwable t)
             {
-                view.hideLoading();
+                _view.hideLoading();
             }
         });
     }

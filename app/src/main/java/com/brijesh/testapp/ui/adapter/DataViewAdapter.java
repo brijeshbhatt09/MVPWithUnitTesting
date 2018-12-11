@@ -19,11 +19,11 @@ import java.util.List;
 
 public class DataViewAdapter extends RecyclerView.Adapter<DataViewHolder>
 {
-    private List<Rows> rowsList;
+    private List<Rows> _rowsList;
 
     public DataViewAdapter(ArrayList<Rows> rows)
     {
-        this.rowsList = rows;
+        this._rowsList = rows;
     }
 
     /*This will inflate view and returns viewholder bind with view*/
@@ -38,13 +38,13 @@ public class DataViewAdapter extends RecyclerView.Adapter<DataViewHolder>
     @Override
     public void onBindViewHolder(DataViewHolder holder, int position)
     {
-        holder.bindViewHolder(rowsList.get(position));
+        holder.bindViewHolder(_rowsList.get(position));
     }
 
     /*returns size of list if not empty else returns zero*/
     @Override
     public int getItemCount()
     {
-        return rowsList != null ? rowsList.size() : 0;
+        return _rowsList != null ? _rowsList.size() : 0;
     }
 }

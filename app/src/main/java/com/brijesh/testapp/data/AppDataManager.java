@@ -14,26 +14,26 @@ import retrofit2.Call;
 
 public class AppDataManager implements DataManager
 {
-    private static AppDataManager dataManager;
-    private AppApiHelper apiHelper;
+    private static AppDataManager _dataManager;
+    private AppApiHelper _apiHelper;
 
     private AppDataManager()
     {
-        this.apiHelper = AppApiHelper.getInstance();
+        this._apiHelper = AppApiHelper.getInstance();
     }
 
     public static AppDataManager getInstance()
     {
-        if(dataManager == null)
+        if(_dataManager == null)
         {
-            dataManager = new AppDataManager();
+            _dataManager = new AppDataManager();
         }
-        return dataManager;
+        return _dataManager;
     }
 
     @Override
     public Call<ViewResponse> getResponse(String url)
     {
-        return apiHelper.getResponse(url);
+        return _apiHelper.getResponse(url);
     }
 }

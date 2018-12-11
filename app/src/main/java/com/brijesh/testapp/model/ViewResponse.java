@@ -17,18 +17,8 @@ public class ViewResponse
         return !TextUtils.isEmpty(title) ? title.trim() : "";
     }
 
-    public void setTitle(String title)
-    {
-        this.title = title;
-    }
-
     public ArrayList<Rows> getRows()
     {
         return rows;
-    }
-
-    public void setRows(ArrayList<Rows> rows)
-    {
-        this.rows = rows;
     }
 }

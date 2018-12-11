@@ -21,9 +21,9 @@ public class DataViewHolder extends RecyclerView.ViewHolder
 {
     /*bind Views with resource id*/
 
-    @BindView(R.id.rowTitle) TextView rowTitle;
-    @BindView(R.id.rowDescription) TextView rowDescription;
-    @BindView(R.id.rowImage) ImageView rowImage;
+    @BindView(R.id.rowTitle) TextView _rowTitle;
+    @BindView(R.id.rowDescription) TextView _rowDescription;
+    @BindView(R.id.rowImage) ImageView _rowImage;
 
     public DataViewHolder(View itemView)
     {
@@ -34,12 +34,12 @@ public class DataViewHolder extends RecyclerView.ViewHolder
     /*This method will populate data in all fileds of row and call glide library for image loading*/
     public void bindViewHolder(Rows row)
     {
-        rowTitle.setText(row.getTitle());
-        rowDescription.setText(row.getDescription());
+        _rowTitle.setText(row.getTitle());
+        _rowDescription.setText(row.getDescription());
         Glide.with(itemView.getContext())
                 .load(row.getImageHref())
                 .thumbnail(0.5f)
                 .apply(new RequestOptions().placeholder(new ColorDrawable(ContextCompat.getColor(itemView.getContext(), R.color.colorPlaceholder))))
-                .into(rowImage);
+                .into(_rowImage);
     }
 }
