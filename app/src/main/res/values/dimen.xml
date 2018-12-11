@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_5">5dp</dimen>
+    <dimen name="padding_8">8dp</dimen>
+    <dimen name="padding_4">4dp</dimen>
+
+    <!-- ImageView Height and width -->
+
+    <dimen name="image_height">90dp</dimen>
+    <dimen name="image_width">120dp</dimen>
+</resources>
