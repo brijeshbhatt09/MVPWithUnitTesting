@@ -2,19 +2,33 @@ package com.brijesh.testapp.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 import com.brijesh.testapp.R;
 import com.brijesh.testapp.data.AppDataManager;
 import com.brijesh.testapp.model.Rows;
 import com.brijesh.testapp.model.ViewResponse;
+import com.brijesh.testapp.ui.adapter.DataViewAdapter;
 import com.brijesh.testapp.ui.interfaces.MainMVP;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+/**
+ * Created by ${Brijesh.Bhatt} on 10/12/18.
+ */
+
 public class ListActivity extends AppCompatActivity implements MainMVP.View
 {
-    /*Declared objects*/
+    /*Declared objects and bind view with Resources*/
 
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
+
+    private RecyclerView.LayoutManager layoutManager;
+    private DataViewAdapter dataViewAdapter;
     private MainMVP.Presenter presenter;
     private ArrayList<Rows> rowsList;
 
@@ -23,6 +37,10 @@ public class ListActivity extends AppCompatActivity implements MainMVP.View
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+        /*Bind view this activity to butterknife*/
+
+        ButterKnife.bind(this);
 
         /*initialize Vies and Presenter*/
         initView();
@@ -44,7 +62,13 @@ public class ListActivity extends AppCompatActivity implements MainMVP.View
 
     private void initView()
     {
+        /* This will create empty list, adapter  and set adapter to recycler*/
+
         rowsList = new ArrayList<>();
+        dataViewAdapter = new DataViewAdapter(rowsList);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(dataViewAdapter);
     }
 
 
@@ -61,9 +85,11 @@ public class ListActivity extends AppCompatActivity implements MainMVP.View
     public void updateResponse(ViewResponse viewResponse)
     {
         /* update view on service response*/
+
         if(viewResponse != null)
         {
             rowsList.addAll(viewResponse.getRows());
+            dataViewAdapter.notifyDataSetChanged();
         }
     }
 
