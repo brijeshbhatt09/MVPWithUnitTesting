@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TestApp</string>
+    <string name="default_text">Not Available</string>
+    <string name="no_items">Not data to display. Refresh to try again.</string>
+
+    <!--Network Exception Strings-->
+    <string name="no_network">No Network Connection. Refresh to try again.</string>
 </resources>
