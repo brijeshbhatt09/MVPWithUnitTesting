@@ -1,8 +1,6 @@
 package com.brijesh.testapp.data;
 
 
-import android.content.Context;
-
 import com.brijesh.testapp.data.network.AppApiHelper;
 import com.brijesh.testapp.model.ViewResponse;
 
@@ -19,16 +17,16 @@ public class AppDataManager implements DataManager
     private static AppDataManager _dataManager;
     private AppApiHelper _apiHelper;
 
-    private AppDataManager(Context context)
+    private AppDataManager()
     {
-        this._apiHelper = AppApiHelper.getInstance(context);
+        this._apiHelper = AppApiHelper.getInstance();
     }
 
-    public static AppDataManager getInstance(Context context)
+    public static AppDataManager getInstance()
     {
         if(_dataManager == null)
         {
-            _dataManager = new AppDataManager(context);
+            _dataManager = new AppDataManager();
         }
         return _dataManager;
     }

@@ -1,14 +1,12 @@
 package com.brijesh.testapp.data.network;
 
-import android.content.Context;
-
 import com.brijesh.testapp.model.ViewResponse;
+import com.brijesh.testapp.utils.Constant;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
@@ -24,24 +22,13 @@ public class AppApiHelper implements ApiHelper
 {
     private ApiRequest _apiRequest;
     private static AppApiHelper _appApiHelper;
-    private static final String Base_url = "https://dl.dropboxusercontent.com/";
     private static final int TIME_OUT = 60;
-    private static final int cacheSize = 10 * 1024 * 1024; // 10 MB
-    private Context _context;
-    private Cache _cache;
 
-
-    private AppApiHelper(Context context)
-    {
-        this._context = context;
-        _cache = new Cache(_context.getCacheDir(), cacheSize);
-    }
-
-    public static AppApiHelper getInstance(Context context)
+    public static AppApiHelper getInstance()
     {
         if (_appApiHelper == null)
             {
-                _appApiHelper = new AppApiHelper(context);
+                _appApiHelper = new AppApiHelper();
             }
 
         return _appApiHelper;
@@ -59,21 +46,17 @@ public class AppApiHelper implements ApiHelper
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
-        CachingInterceptor cachingInterceptor = new CachingInterceptor();
-
         Gson gson = new GsonBuilder().setLenient().create();
         OkHttpClient okHttpClient = new OkHttpClient().newBuilder()
                 .connectTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .writeTimeout(TIME_OUT, TimeUnit.SECONDS)
                 .readTimeout(TIME_OUT, TimeUnit.SECONDS)
-                .cache(_cache)
-                .addInterceptor(cachingInterceptor)
                 .addInterceptor(loggingInterceptor)
                 .build();
 
 
         return new Retrofit.Builder()
-                .baseUrl(Base_url)
+                .baseUrl(Constant.BASE_URL)
                 .client(okHttpClient).addConverterFactory(GsonConverterFactory.create(gson)).build();
     }
 
