@@ -1,9 +1,12 @@
-package com.brijesh.testapp.ui;
+package com.brijesh.testapp.presenter;
 
 import com.brijesh.testapp.data.DataManager;
 import com.brijesh.testapp.model.ViewResponse;
-import com.brijesh.testapp.ui.interfaces.BasePresenter;
 import com.brijesh.testapp.ui.interfaces.MainMVP;
+import com.brijesh.testapp.utils.Constant;
+
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,9 +33,12 @@ public class ListActivityPresenter<V extends MainMVP.View> extends BasePresenter
     /*This method is called by attached view to get data from server*/
 
     @Override
-    public void callWebService(String url)
+    public void callWebService(String url, boolean isRefresh)
     {
-        _view.showLoading();
+        if (!isRefresh)
+        {
+            _view.showLoading(true, false);
+        }
 
         Call<ViewResponse> viewData = _dataManager.getResponse(url);
         viewData.enqueue(new Callback<ViewResponse>()
@@ -40,17 +46,48 @@ public class ListActivityPresenter<V extends MainMVP.View> extends BasePresenter
             @Override
             public void onResponse(Call<ViewResponse> call, Response<ViewResponse> response)
             {
-                _view.hideLoading();
+                if (!isRefresh)
+                {
+                    _view.showLoading(false, false);
+                }
+                else
+                {
+                    _view.showLoading(false, true);
+                }
+
                 if(response != null && response.isSuccessful())
                 {
                     _view.updateResponse(response.body());
+                }
+                else
+                {
+                    _view.showError(response.code() + Constant.ERROR);
                 }
             }
 
             @Override
             public void onFailure(Call<ViewResponse> call, Throwable t)
             {
-                _view.hideLoading();
+                if (!isRefresh)
+                {
+                    _view.showLoading(false, false);
+                }
+                else
+                {
+                    _view.showLoading(false, true);
+                }
+                if(t instanceof  ConnectException)
+                {
+                    _view.showError(Constant.ERROR_CONNECTION);
+                }
+                else if(t instanceof SocketTimeoutException)
+                {
+                    _view.showError(Constant.ERROR_TIMEOUT);
+                }
+                else
+                {
+                    _view.showError(t.getMessage() + "\n Refresh to try again.");
+                }
             }
         });
     }

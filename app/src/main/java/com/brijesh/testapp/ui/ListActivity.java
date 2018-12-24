@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.brijesh.testapp.R;
+import com.brijesh.testapp.ui.interfaces.UpdateTitleListener;
 
 import butterknife.ButterKnife;
 
@@ -15,7 +17,7 @@ import butterknife.ButterKnife;
  * Created by ${Brijesh.Bhatt} on 10/12/18.
  */
 
-public class ListActivity extends AppCompatActivity
+public class ListActivity extends AppCompatActivity implements UpdateTitleListener
 {
     private static final String TAG = ListActivity.class.getSimpleName();
 
@@ -29,7 +31,11 @@ public class ListActivity extends AppCompatActivity
         /*Bind view this activity to butterknife*/
         ButterKnife.bind(this);
 
-        initFragment();
+        getSupportActionBar().setTitle(getResources().getString(R.string.default_text)); //set default toolbar title
+
+        Fragment replacableFragment = new ListActivityFragment();
+        initFragment(replacableFragment);
+
     }
 
     @Override
@@ -45,10 +51,13 @@ public class ListActivity extends AppCompatActivity
     }
 
     /*Attach Fragment to Activity*/
-    private void initFragment()
+    public void initFragment(Fragment replacableFragment)
     {
-        Fragment replacableFragment = new ListActivityFragment();
-        replaceContentFragment(getSupportFragmentManager(), replacableFragment, true, R.id.fragmentContainer, 0, 0, 0, 0, false);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() == 0)
+        {
+            replaceContentFragment(getSupportFragmentManager(), replacableFragment, true, R.id.fragmentContainer, 0, 0, 0, 0, false);
+        }
     }
 
     /**
@@ -93,8 +102,22 @@ public class ListActivity extends AppCompatActivity
             fragmentTransaction.addToBackStack(mFragmentName);
         }
 
-        fragmentTransaction.commit();
+        fragmentTransaction.commitAllowingStateLoss();
         Log.e("TAG", "Success");
+    }
+
+    /*This method will set tootlbar title from api response */
+    @Override
+    public void onTitleUpdateCallback(String title)
+    {
+
+        if (!TextUtils.isEmpty(title))
+        {
+            getSupportActionBar().setTitle(title); // set updated title
+        } else
+        {
+            getSupportActionBar().setTitle(getResources().getString(R.string.default_text)); // set default toolbar title
+        }
     }
 
     @Override
@@ -102,4 +125,5 @@ public class ListActivity extends AppCompatActivity
     {
         super.onDestroy();
     }
+
 }
