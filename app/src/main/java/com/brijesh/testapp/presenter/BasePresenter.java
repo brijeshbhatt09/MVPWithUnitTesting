@@ -1,4 +1,7 @@
-package com.brijesh.testapp.ui.interfaces;
+package com.brijesh.testapp.presenter;
+
+
+import com.brijesh.testapp.ui.interfaces.BaseMVP;
 
 /**
  * Created by ${Brijesh.Bhatt} on 10/12/18.
