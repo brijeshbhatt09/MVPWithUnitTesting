@@ -14,18 +14,20 @@ public class NetworkCheck
 {
     private static ConnectivityManager cm;
 
+
     public static void initNetwork(Context context)
     {
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
+    /*Check network connection */
     public static boolean isOnline()
     {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
 
         if (netInfo != null)
         {
-            return netInfo.isConnected(); // WIFI connected
+            return netInfo.isConnected();
         } else
         {
             return false;
