@@ -15,13 +15,13 @@ public class NetworkCheck
     private static ConnectivityManager cm;
 
 
-    public static void initNetwork(Context context)
+    public void initNetwork(Context context)
     {
         cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     /*Check network connection */
-    public static boolean isOnline()
+    public boolean isOnline()
     {
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
 
