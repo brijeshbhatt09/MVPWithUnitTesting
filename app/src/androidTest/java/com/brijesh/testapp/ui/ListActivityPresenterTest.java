@@ -15,9 +15,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InOrder;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
+
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -27,6 +32,7 @@ import retrofit2.Response;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.times;
 
 /**
  * Created by Brijesh.Bhatt on 11/12/18.
@@ -55,38 +61,96 @@ public class ListActivityPresenterTest {
     }
 
     @Test
-    public void showDataWhenOnSuccessfulResponse() throws Exception
+    public void TestSuccessFullResponse() throws Exception
     {
-
         String fileName = "api_success_response.json";
         String URL = "/api_success_response.json";
-       MockResponse response = new MockResponse()
-               .setResponseCode(200)
-               .setBody(RestServiceTestHelper.getStringFromFile(instrumentationCtx, fileName));
+        MockResponse response = new MockResponse()
+                .setResponseCode(200)
+                .setBody(RestServiceTestHelper.getStringFromFile(instrumentationCtx, fileName));
 
         // Enqueue request
+        mview.showLoading(true, false);
         mockWebServer.enqueue(response);
         Call<ViewResponse> viewData = dataManager.getResponse(URL);
         Response<ViewResponse> viewResponse = viewData.execute();
+        presenter.handleSuccessFullResponse(viewResponse, false);
         assertTrue(viewResponse.isSuccessful());
         assertNotNull(viewResponse.body());
+        InOrder inOrder = Mockito.inOrder(mview);
+        inOrder.verify(mview, times(1)).showLoading(true, false);
+        inOrder.verify(mview, times(1)).showLoading(false, false);
+        inOrder.verify(mview, times(1)).updateResponse(viewResponse.body());
     }
 
     @Test
-    public void showErrorWhenOnErrorResponse() throws Exception
+    public void TestSuccessFullResponseWithErrorCode() throws Exception
     {
-
-        String fileName = "api_faliure_response.json";
-        String URL = "/api_faliure_response.json";
+        String fileName = "api_success_response.json";
+        String URL = "/api_success_response.json";
         MockResponse response = new MockResponse()
                 .setResponseCode(404)
                 .setBody(RestServiceTestHelper.getStringFromFile(instrumentationCtx, fileName));
 
         // Enqueue request
+        mview.showLoading(true, false);
         mockWebServer.enqueue(response);
         Call<ViewResponse> viewData = dataManager.getResponse(URL);
         Response<ViewResponse> viewResponse = viewData.execute();
+        presenter.handleSuccessFullResponse(viewResponse, false);
         assertFalse(viewResponse.isSuccessful());
+        InOrder inOrder = Mockito.inOrder(mview);
+        inOrder.verify(mview, times(1)).showLoading(true, false);
+        inOrder.verify(mview, times(1)).showLoading(false, false);
+        inOrder.verify(mview, times(1)).showError(viewResponse.code() + Constant.ERROR);
+    }
+
+    @Test
+    public void TestFaliureSocketTimeOut() throws Exception
+    {
+        SocketTimeoutException socketTimeoutException = Mockito.mock(SocketTimeoutException.class);
+        mview.showLoading(true, false);
+        presenter.handleFaliure(socketTimeoutException, false);
+        InOrder inOrder = Mockito.inOrder(mview);
+        inOrder.verify(mview, times(1)).showLoading(true, false);
+        inOrder.verify(mview, times(1)).showLoading(false, false);
+        inOrder.verify(mview, times(1)).showError(Constant.ERROR_TIMEOUT);
+    }
+
+    @Test
+    public void TestFaliureConnection() throws Exception
+    {
+        ConnectException connectException = Mockito.mock(ConnectException.class);
+        mview.showLoading(true, false);
+        presenter.handleFaliure(connectException, false);
+        InOrder inOrder = Mockito.inOrder(mview);
+        inOrder.verify(mview, times(1)).showLoading(true, false);
+        inOrder.verify(mview, times(1)).showLoading(false, false);
+        inOrder.verify(mview, times(1)).showError(Constant.ERROR_CONNECTION);
+    }
+
+    @Test
+    public void TestFaliure() throws Exception
+    {
+        Throwable throwable = Mockito.mock(Throwable.class);
+        mview.showLoading(true, false);
+        presenter.handleFaliure(throwable, false);
+        InOrder inOrder = Mockito.inOrder(mview);
+        inOrder.verify(mview, times(1)).showLoading(true, false);
+        inOrder.verify(mview, times(1)).showLoading(false, false);
+        inOrder.verify(mview, times(1)).showError(throwable.getMessage() + "\n Refresh to try again.");
+    }
+
+    @Test
+    public void TestRefreshfaliure() throws Exception
+    {
+        Throwable throwable = Mockito.mock(Throwable.class);
+        mview.showLoading(true, true);
+        presenter.handleFaliure(throwable, true);
+        InOrder inOrder = Mockito.inOrder(mview);
+        inOrder.verify(mview, times(1)).showLoading(true, true);
+        inOrder.verify(mview, times(1)).showLoading(false, true);
+        inOrder.verify(mview, times(1)).showError(throwable.getMessage() + "\n Refresh to try again.");
     }
 
 
