@@ -52,6 +52,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     private ArrayList<Rows> _rowsList;
     private ArrayList<Rows> _filterList;
     private UpdateTitleListener _updateTitleListener;
+    private NetworkCheck networkCheck;
 
 
     @Override
@@ -100,10 +101,12 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
         super.onPause();
     }
 
-    private void initView()
+    public void initView()
     {
         /* This will create empty list, adapter and set adapter to recycler*/
 
+        networkCheck = new NetworkCheck();
+        networkCheck.initNetwork(getContext());
         _rowsList = new ArrayList<>();
         _filterList = new ArrayList<>();
         _dataViewAdapter = new DataViewAdapter(_filterList);
@@ -116,13 +119,13 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     }
 
     /*intialize presenter object, attach view to presenter and call service to fetch data from server*/
-    private void initPresenter()
+    public void initPresenter()
     {
         _presenter = new ListActivityPresenter(AppDataManager.getInstance(), this);
         _presenter.onAttach(this);
 
         /*Check network If not network available show error message else call service*/
-        if(NetworkCheck.isOnline())
+        if(networkCheck.isOnline())
         {
             errorMessage.setVisibility(View.GONE);
             _presenter.callWebService(Constant.HOME_API_URL, false);
@@ -142,7 +145,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
             if (_presenter != null)
             {
                 /*Check network If not network available show error message else call service*/
-                if(NetworkCheck.isOnline())
+                if(networkCheck.isOnline())
                 {
                     errorMessage.setVisibility(View.GONE);
                     _presenter.callWebService(Constant.HOME_API_URL, true);

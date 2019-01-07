@@ -28,8 +28,6 @@ public class RestServiceTestHelper {
 
         AssetManager am = context.getAssets();
         InputStream stream = am.open(filePath);
-        //final InputStream stream = context.getResources().getAssets().open(filePath);
-
         String ret = convertStreamToString(stream);
         //Make sure you close all streams.
         stream.close();
