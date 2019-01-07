@@ -46,49 +46,61 @@ public class ListActivityPresenter<V extends MainMVP.View> extends BasePresenter
             @Override
             public void onResponse(Call<ViewResponse> call, Response<ViewResponse> response)
             {
-                if (!isRefresh)
-                {
-                    _view.showLoading(false, false);
-                }
-                else
-                {
-                    _view.showLoading(false, true);
-                }
-
-                if(response != null && response.isSuccessful())
-                {
-                    _view.updateResponse(response.body());
-                }
-                else
-                {
-                    _view.showError(response.code() + Constant.ERROR);
-                }
+                handleSuccessFullResponse(response, isRefresh);
             }
 
             @Override
             public void onFailure(Call<ViewResponse> call, Throwable t)
             {
-                if (!isRefresh)
-                {
-                    _view.showLoading(false, false);
-                }
-                else
-                {
-                    _view.showLoading(false, true);
-                }
-                if(t instanceof  ConnectException)
-                {
-                    _view.showError(Constant.ERROR_CONNECTION);
-                }
-                else if(t instanceof SocketTimeoutException)
-                {
-                    _view.showError(Constant.ERROR_TIMEOUT);
-                }
-                else
-                {
-                    _view.showError(t.getMessage() + "\n Refresh to try again.");
-                }
+                handleFaliure(t, isRefresh);
             }
         });
+    }
+
+    /* Handle successfull api response*/
+    public void handleSuccessFullResponse(Response<ViewResponse> response, boolean isRefresh)
+    {
+        if (!isRefresh)
+        {
+            _view.showLoading(false, false);
+        }
+        else
+        {
+            _view.showLoading(false, true);
+        }
+
+        if(response != null && response.isSuccessful())
+        {
+            _view.updateResponse(response.body());
+        }
+        else
+        {
+            _view.showError(response.code() + Constant.ERROR);
+        }
+    }
+
+    /* Handle api faliures*/
+    public void handleFaliure(Throwable t, boolean isRefresh)
+    {
+        if (!isRefresh)
+        {
+            _view.showLoading(false, false);
+        }
+        else
+        {
+            _view.showLoading(false, true);
+        }
+        if(t instanceof ConnectException)
+        {
+            _view.showError(Constant.ERROR_CONNECTION);
+        }
+        else if(t instanceof SocketTimeoutException)
+        {
+            _view.showError(Constant.ERROR_TIMEOUT);
+        }
+        else
+        {
+            _view.showError(t.getMessage() + "\n Refresh to try again.");
+        }
     }
 }
