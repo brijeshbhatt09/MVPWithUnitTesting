@@ -33,7 +33,8 @@ public class ListActivity extends AppCompatActivity implements UpdateTitleListen
 
         getSupportActionBar().setTitle(getResources().getString(R.string.default_text)); //set default toolbar title
 
-        Fragment replacableFragment = new ListActivityFragment();
+        ListActivityFragment replacableFragment = new ListActivityFragment();
+        replacableFragment.set_updateTitleListener(this);
         initFragment(replacableFragment);
 
     }

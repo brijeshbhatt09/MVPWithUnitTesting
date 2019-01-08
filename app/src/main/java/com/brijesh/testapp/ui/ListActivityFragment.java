@@ -1,6 +1,5 @@
 package com.brijesh.testapp.ui;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,7 +40,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     RecyclerView _recyclerView;
     @BindView(R.id.swipeRefreshView)
     SwipeRefreshLayout _swipeRefreshView;
-    @BindView(R.id.loading)
+    @BindView(R.id.appLoadingContainer)
     FrameLayout _loadingContainer;
     @BindView(R.id.errorMessage)
     TextView errorMessage;
@@ -54,13 +53,6 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     private UpdateTitleListener _updateTitleListener;
     private NetworkCheck networkCheck;
 
-
-    @Override
-    public void onAttach(Context context)
-    {
-        super.onAttach(context);
-        _updateTitleListener = (ListActivity)context;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -84,9 +76,19 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     {
         super.onViewCreated(view, savedInstanceState);
 
-        /*initialize Vies and Presenter*/
+        /*initialize NetworkCheck class*/
+        networkCheck = new NetworkCheck();
+        networkCheck.initNetwork(getContext());
+
+        /*initialize Views and Presenter*/
         initView();
-        initPresenter();
+        initPresenter(networkCheck);
+    }
+
+    /*This method will set listener to update app title*/
+    public void set_updateTitleListener(UpdateTitleListener updateTitleListener)
+    {
+        _updateTitleListener = updateTitleListener;
     }
 
     @Override
@@ -104,9 +106,6 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     public void initView()
     {
         /* This will create empty list, adapter and set adapter to recycler*/
-
-        networkCheck = new NetworkCheck();
-        networkCheck.initNetwork(getContext());
         _rowsList = new ArrayList<>();
         _filterList = new ArrayList<>();
         _dataViewAdapter = new DataViewAdapter(_filterList);
@@ -119,7 +118,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     }
 
     /*intialize presenter object, attach view to presenter and call service to fetch data from server*/
-    public void initPresenter()
+    public void initPresenter(NetworkCheck networkCheck)
     {
         _presenter = new ListActivityPresenter(AppDataManager.getInstance(), this);
         _presenter.onAttach(this);
@@ -229,15 +228,4 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
         }
     }
 
-    @Override
-    public void onDestroy()
-    {
-        super.onDestroy();
-        _presenter.onDetach(this);
-        _updateTitleListener = null;
-        _dataViewAdapter = null;
-        _rowsList = null;
-        _filterList = null;
-        _recyclerView = null;
-    }
 }

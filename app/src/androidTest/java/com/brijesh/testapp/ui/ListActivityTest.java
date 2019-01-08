@@ -1,19 +1,19 @@
 package com.brijesh.testapp.ui;
 
-import android.app.Activity;
-import android.os.Build;
-import android.support.test.filters.SdkSuppress;
 import android.support.test.rule.ActivityTestRule;
-import android.util.Log;
 import android.view.View;
 
 import com.brijesh.testapp.R;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
+import static android.support.test.InstrumentationRegistry.getInstrumentation;
+import static android.support.test.espresso.Espresso.onView;
+import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static junit.framework.TestCase.assertNotNull;
 
 /**
@@ -21,34 +21,43 @@ import static junit.framework.TestCase.assertNotNull;
  */
 public class ListActivityTest
 {
+    ListActivity listActivity = null;
 
     @Rule
-    public ActivityTestRule<ListActivity>mActivityTestRule = new ActivityTestRule<ListActivity>(ListActivity.class);
-
-    private ListActivity mActivity = null;
+    public ActivityTestRule<ListActivity> mActivityTestRule = new ActivityTestRule<ListActivity>(ListActivity.class);
 
     @Before
     public void setUp() throws Exception {
-        mActivity = mActivityTestRule.getActivity();
+
+        listActivity = mActivityTestRule.getActivity();
     }
 
     @Test
-    public void TestLaunch(){
-        View view = mActivity.findViewById(R.id.fragmentContainer);
+    public void TestInitFragment(){
+
+        View view = listActivity.findViewById(R.id.fragmentContainer);
         assertNotNull(view);
 
-    }
+        ListActivityFragment listActivityFragment = new ListActivityFragment();
+        listActivity.initFragment(listActivityFragment);
 
-    @After
-    public void tearDown() throws Exception {
-        mActivity = null;
+        getInstrumentation().waitForIdleSync();
+
+        View fragment = listActivityFragment.getView().findViewById(R.id.swipeRefreshView);
+        assertNotNull(fragment);
     }
 
     @Test
-    @SdkSuppress(minSdkVersion = Build.VERSION_CODES.KITKAT)
-    public void testMinBuild() {
-        Log.d("Test Filters", "Checking for min build > kitkat");
-        Activity activity = mActivityTestRule.getActivity();
-        assertNotNull("ListActivity is not available", activity);
+    public void TestTitleUpdate(){
+
+        listActivity.runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                listActivity.onTitleUpdateCallback("Title");
+            }
+        });
+        onView(withText("Title")).check(matches(isDisplayed()));
     }
 }
