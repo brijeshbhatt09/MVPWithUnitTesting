@@ -17,6 +17,6 @@ public interface MainMVP
 
     interface Presenter<T extends MainMVP.View> extends BaseMVP.Presenter<T>
     {
-        void callWebService(String url, boolean isRefresh);
+        void callHomeApi(String url, boolean isRefresh);
     }
 }

@@ -33,7 +33,7 @@ public class ListActivityPresenter<V extends MainMVP.View> extends BasePresenter
     /*This method is called by attached view to get data from server*/
 
     @Override
-    public void callWebService(String url, boolean isRefresh)
+    public void callHomeApi(String url, boolean isRefresh)
     {
         if (!isRefresh)
         {

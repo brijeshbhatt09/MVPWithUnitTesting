@@ -127,7 +127,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
         if(networkCheck.isOnline())
         {
             errorMessage.setVisibility(View.GONE);
-            _presenter.callWebService(Constant.HOME_API_URL, false);
+            _presenter.callHomeApi(Constant.HOME_API_URL, false);
         }
         else
         {
@@ -147,7 +147,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
                 if(networkCheck.isOnline())
                 {
                     errorMessage.setVisibility(View.GONE);
-                    _presenter.callWebService(Constant.HOME_API_URL, true);
+                    _presenter.callHomeApi(Constant.HOME_API_URL, true);
                 }
                 else
                 {
