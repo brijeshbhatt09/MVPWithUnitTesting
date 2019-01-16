@@ -95,7 +95,7 @@ public class ListActivityFragmentFunctionalTest
     }
 
     @Test
-    public void TestInitPresenterWithNetwork()
+    public void checkNetworkWhenOnline()
     {
         NetworkCheck networkCheck = Mockito.mock(NetworkCheck.class);
         when(networkCheck.isOnline()).thenReturn(true);
@@ -104,14 +104,14 @@ public class ListActivityFragmentFunctionalTest
             @Override
             public void run()
             {
-                listActivityFragment.initPresenter(networkCheck);
+                listActivityFragment.checkNetwork(networkCheck);
             }
         });
         onView(withId(R.id.errorMessage)).check(matches(not(isDisplayed())));
     }
 
     @Test
-    public void TestInitPresenterWithoutNetwork()
+    public void checkNetworkWhenOffline()
     {
         NetworkCheck networkCheck = Mockito.mock(NetworkCheck.class);
         when(networkCheck.isOnline()).thenReturn(false);
@@ -120,7 +120,7 @@ public class ListActivityFragmentFunctionalTest
             @Override
             public void run()
             {
-                listActivityFragment.initPresenter(networkCheck);
+                listActivityFragment.checkNetwork(networkCheck);
             }
         });
         onView(withId(R.id.errorMessage)).check(matches(isDisplayed()));
