@@ -1,5 +1,6 @@
 package com.brijesh.testapp.ui;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,11 +26,14 @@ import com.brijesh.testapp.ui.interfaces.MainMVP;
 import com.brijesh.testapp.ui.interfaces.UpdateTitleListener;
 import com.brijesh.testapp.utils.Constant;
 import com.brijesh.testapp.utils.NetworkCheck;
+import com.brijesh.testapp.viewmodel.ListActivityViewModel;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 
 /**
  * Created by ${Brijesh.Bhatt} on 11/12/18.
@@ -52,6 +56,8 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     private ArrayList<Rows> _filterList;
     private UpdateTitleListener _updateTitleListener;
     private NetworkCheck networkCheck;
+    private ListActivityViewModel viewModel;
+    private Unbinder unbinder;
 
 
     @Override
@@ -67,7 +73,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
         View view = inflater.inflate(R.layout.fragment_list, container, false);
 
         /*Bind view this fragment to butterknife*/
-        ButterKnife.bind(this, view);
+        unbinder = ButterKnife.bind(this, view);
         return view;
     }
 
@@ -75,6 +81,8 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
+        /*create viewModel using provider to hold data*/
+        viewModel = ViewModelProviders.of(getActivity()).get(ListActivityViewModel.class);
 
         /*initialize NetworkCheck class*/
         networkCheck = new NetworkCheck();
@@ -82,7 +90,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
 
         /*initialize Views and Presenter*/
         initView();
-        initPresenter(networkCheck);
+        initPresenterandCheckData(networkCheck);
     }
 
     /*This method will set listener to update app title*/
@@ -115,15 +123,33 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
 
         /*set listener to refresh list of rows*/
         _swipeRefreshView.setOnRefreshListener(mOnRefreshListener);
+
     }
 
-    /*intialize presenter object, attach view to presenter and call service to fetch data from server*/
-    public void initPresenter(NetworkCheck networkCheck)
+    /*intialize presenter object, attach view to presenter  and check viewModel for data*/
+    public void initPresenterandCheckData(NetworkCheck networkCheck)
     {
-        _presenter = new ListActivityPresenter(AppDataManager.getInstance(), this);
+        _presenter = new ListActivityPresenter(AppDataManager.getInstance());
         _presenter.onAttach(this);
+        _presenter.setView();
 
-        /*Check network If not network available show error message else call service*/
+        if(viewModel.getViewResponse() != null)
+        {
+            errorMessage.setVisibility(View.GONE);
+            updateResponse(viewModel.getViewResponse());
+        }
+        else
+        {
+            checkNetwork(networkCheck);
+        }
+    }
+
+    /*Check Network:
+    if available: call service to fetch data from server
+    esle: show error*/
+
+    public void checkNetwork(NetworkCheck networkCheck)
+    {
         if(networkCheck.isOnline())
         {
             errorMessage.setVisibility(View.GONE);
@@ -182,6 +208,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
     {
         if (viewResponse != null)
         {
+            viewModel.setViewResponse(viewResponse);
             if(viewResponse.getRows() != null && viewResponse.getRows().size() > 0)
             {
                 if(_updateTitleListener != null)

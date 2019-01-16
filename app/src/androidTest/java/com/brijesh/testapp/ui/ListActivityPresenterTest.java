@@ -53,7 +53,9 @@ public class ListActivityPresenterTest {
 
         MockitoAnnotations.initMocks(this);
         instrumentationCtx = InstrumentationRegistry.getContext();
-        presenter = new ListActivityPresenter(dataManager,mview);
+        presenter = new ListActivityPresenter(dataManager);
+        presenter.onAttach(mview);
+        presenter.setView();
         dataManager = AppDataManager.getInstance();
         mockWebServer = new MockWebServer();
         mockWebServer.start();

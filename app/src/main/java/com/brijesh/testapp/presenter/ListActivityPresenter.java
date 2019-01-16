@@ -24,10 +24,16 @@ public class ListActivityPresenter<V extends MainMVP.View> extends BasePresenter
     DataManager _dataManager;
     MainMVP.View _view;
 
-    public ListActivityPresenter(DataManager dataManager, MainMVP.View view)
+
+    public ListActivityPresenter(DataManager dataManager)
     {
         this._dataManager = dataManager;
-        this._view = view;
+    }
+
+    @Override
+    public void setView()
+    {
+        this._view = getBaseView();
     }
 
     /*This method is called by attached view to get data from server*/

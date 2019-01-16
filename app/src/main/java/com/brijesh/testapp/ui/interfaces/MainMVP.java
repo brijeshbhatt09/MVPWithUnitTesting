@@ -18,5 +18,6 @@ public interface MainMVP
     interface Presenter<T extends MainMVP.View> extends BaseMVP.Presenter<T>
     {
         void callHomeApi(String url, boolean isRefresh);
+        void setView();
     }
 }

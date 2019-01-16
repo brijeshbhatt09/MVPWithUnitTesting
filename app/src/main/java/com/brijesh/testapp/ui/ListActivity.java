@@ -12,6 +12,7 @@ import com.brijesh.testapp.R;
 import com.brijesh.testapp.ui.interfaces.UpdateTitleListener;
 
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 /**
  * Created by ${Brijesh.Bhatt} on 10/12/18.
@@ -20,6 +21,8 @@ import butterknife.ButterKnife;
 public class ListActivity extends AppCompatActivity implements UpdateTitleListener
 {
     private static final String TAG = ListActivity.class.getSimpleName();
+    private ListActivityFragment replacableFragment;
+    private Unbinder unbinder;
 
 
     @Override
@@ -29,14 +32,20 @@ public class ListActivity extends AppCompatActivity implements UpdateTitleListen
         setContentView(R.layout.activity_list);
 
         /*Bind view this activity to butterknife*/
-        ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
 
         getSupportActionBar().setTitle(getResources().getString(R.string.default_text)); //set default toolbar title
 
-        ListActivityFragment replacableFragment = new ListActivityFragment();
+        if(savedInstanceState == null)
+        {
+            replacableFragment = new ListActivityFragment();
+            initFragment(replacableFragment);
+        }
+        else
+        {
+            replacableFragment  = (ListActivityFragment) getSupportFragmentManager().getFragment(savedInstanceState, TAG);
+        }
         replacableFragment.set_updateTitleListener(this);
-        initFragment(replacableFragment);
-
     }
 
     @Override
@@ -55,10 +64,7 @@ public class ListActivity extends AppCompatActivity implements UpdateTitleListen
     public void initFragment(Fragment replacableFragment)
     {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (fragmentManager.getBackStackEntryCount() == 0)
-        {
-            replaceContentFragment(getSupportFragmentManager(), replacableFragment, true, R.id.fragmentContainer, 0, 0, 0, 0, false);
-        }
+        replaceContentFragment(fragmentManager, replacableFragment, false, R.id.fragmentContainer, 0, 0, 0, 0, false);
     }
 
     /**
@@ -76,7 +82,7 @@ public class ListActivity extends AppCompatActivity implements UpdateTitleListen
     public void replaceContentFragment(FragmentManager fragmentManager, Fragment fragment, boolean toAdd, int containerId, int enterAnim, int exitAnim, int popEnterAnim, int popExitAnim, boolean addToBackStack)
     {
 
-        /*Return if fragment to be added BaseUIActivity.javais null*/
+        /*Return if fragment to be added activity.javais null*/
         if (fragment == null)
         {
             throw new IllegalArgumentException("Null fragment passed in " + TAG + "#replaceContentFragment");
@@ -122,9 +128,19 @@ public class ListActivity extends AppCompatActivity implements UpdateTitleListen
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, TAG, replacableFragment);
+    }
+
+    @Override
     protected void onDestroy()
     {
         super.onDestroy();
+        unbinder.unbind();
+        replacableFragment = null;
+
     }
 
 }
