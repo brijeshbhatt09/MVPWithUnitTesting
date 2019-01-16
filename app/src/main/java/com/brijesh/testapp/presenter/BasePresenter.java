@@ -17,7 +17,7 @@ public class BasePresenter<V extends BaseMVP.View> implements BaseMVP.Presenter<
     }
 
     @Override
-    public void onDetach(V view)
+    public void onDetach()
     {
         this.baseView = null;
     }

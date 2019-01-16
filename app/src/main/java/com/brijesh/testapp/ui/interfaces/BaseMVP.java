@@ -11,7 +11,7 @@ public interface BaseMVP
     interface Presenter<V extends View>
     {
         void onAttach(V view);
-        void onDetach(V view);
+        void onDetach();
     }
 
     interface View
