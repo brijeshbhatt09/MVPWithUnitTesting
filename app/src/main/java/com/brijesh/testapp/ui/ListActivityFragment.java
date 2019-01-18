@@ -136,7 +136,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
         if(viewModel.getViewResponse() != null)
         {
             errorMessage.setVisibility(View.GONE);
-            updateResponse(viewModel.getViewResponse());
+            updateViewOnResponse(viewModel.getViewResponse());
         }
         else
         {
@@ -204,7 +204,7 @@ public class ListActivityFragment extends Fragment implements MainMVP.View
 
     /* update view on service response*/
     @Override
-    public void updateResponse(ViewResponse viewResponse)
+    public void updateViewOnResponse(ViewResponse viewResponse)
     {
         if (viewResponse != null)
         {

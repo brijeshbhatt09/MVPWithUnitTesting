@@ -59,7 +59,7 @@ public class ListActivityFragmentFunctionalTest
     }
 
     @Test
-    public void showUpdateResponse()
+    public void updateViewOnResponse_Successfull()
     {
         ViewResponse viewResponse = Mockito.mock(ViewResponse.class);
         List<Rows> rows = new ArrayList<>();
@@ -72,14 +72,14 @@ public class ListActivityFragmentFunctionalTest
             @Override
             public void run()
             {
-                listActivityFragment.updateResponse(viewResponse);
+                listActivityFragment.updateViewOnResponse(viewResponse);
             }
         });
         onView(withId(R.id.errorMessage)).check(matches(not(isDisplayed())));
     }
 
     @Test
-    public void showUpdateResponseWithError()
+    public void updateViewOnResponse_Null()
     {
         ViewResponse viewResponse = Mockito.mock(ViewResponse.class);
         Mockito.doReturn(null).when(viewResponse).getRows();
@@ -88,14 +88,14 @@ public class ListActivityFragmentFunctionalTest
             @Override
             public void run()
             {
-                listActivityFragment.updateResponse(viewResponse);
+                listActivityFragment.updateViewOnResponse(viewResponse);
             }
         });
         onView(withId(R.id.errorMessage)).check(matches(isDisplayed()));
     }
 
     @Test
-    public void checkNetworkWhenOnline()
+    public void checkNetwork_Online()
     {
         NetworkCheck networkCheck = Mockito.mock(NetworkCheck.class);
         when(networkCheck.isOnline()).thenReturn(true);
@@ -111,7 +111,7 @@ public class ListActivityFragmentFunctionalTest
     }
 
     @Test
-    public void checkNetworkWhenOffline()
+    public void checkNetwork_Offline()
     {
         NetworkCheck networkCheck = Mockito.mock(NetworkCheck.class);
         when(networkCheck.isOnline()).thenReturn(false);

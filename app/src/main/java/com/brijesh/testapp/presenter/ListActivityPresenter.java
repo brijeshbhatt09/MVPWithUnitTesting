@@ -77,7 +77,7 @@ public class ListActivityPresenter<V extends MainMVP.View> extends BasePresenter
 
         if(response != null && response.isSuccessful())
         {
-            _view.updateResponse(response.body());
+            _view.updateViewOnResponse(response.body());
         }
         else
         {

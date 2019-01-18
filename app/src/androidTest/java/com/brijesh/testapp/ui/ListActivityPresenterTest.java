@@ -35,7 +35,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.times;
 
 /**
- * Created by Brijesh.Bhatt on 11/12/18.
+ * Created by ${Brijesh.Bhatt} on 11/12/18.
  */
 @RunWith(MockitoJUnitRunner.class)
 public class ListActivityPresenterTest {
@@ -63,7 +63,7 @@ public class ListActivityPresenterTest {
     }
 
     @Test
-    public void TestSuccessFullResponse() throws Exception
+    public void testSuccessFullResponse() throws Exception
     {
         String fileName = "api_success_response.json";
         String URL = "/api_success_response.json";
@@ -82,11 +82,11 @@ public class ListActivityPresenterTest {
         InOrder inOrder = Mockito.inOrder(mview);
         inOrder.verify(mview, times(1)).showLoading(true, false);
         inOrder.verify(mview, times(1)).showLoading(false, false);
-        inOrder.verify(mview, times(1)).updateResponse(viewResponse.body());
+        inOrder.verify(mview, times(1)).updateViewOnResponse(viewResponse.body());
     }
 
     @Test
-    public void TestSuccessFullResponseWithErrorCode() throws Exception
+    public void testSuccessFullResponse_ErrorCode() throws Exception
     {
         String fileName = "api_success_response.json";
         String URL = "/api_success_response.json";
@@ -107,8 +107,9 @@ public class ListActivityPresenterTest {
         inOrder.verify(mview, times(1)).showError(viewResponse.code() + Constant.ERROR);
     }
 
+
     @Test
-    public void TestFaliureSocketTimeOut() throws Exception
+    public void testFaliure_SocketTimeOut()
     {
         SocketTimeoutException socketTimeoutException = Mockito.mock(SocketTimeoutException.class);
         mview.showLoading(true, false);
@@ -120,7 +121,7 @@ public class ListActivityPresenterTest {
     }
 
     @Test
-    public void TestFaliureConnection() throws Exception
+    public void testFaliure_Connection()
     {
         ConnectException connectException = Mockito.mock(ConnectException.class);
         mview.showLoading(true, false);
@@ -132,7 +133,7 @@ public class ListActivityPresenterTest {
     }
 
     @Test
-    public void TestFaliure() throws Exception
+    public void testFaliure()
     {
         Throwable throwable = Mockito.mock(Throwable.class);
         mview.showLoading(true, false);
@@ -144,7 +145,7 @@ public class ListActivityPresenterTest {
     }
 
     @Test
-    public void TestRefreshfaliure() throws Exception
+    public void testfaliure_Refresh()
     {
         Throwable throwable = Mockito.mock(Throwable.class);
         mview.showLoading(true, true);

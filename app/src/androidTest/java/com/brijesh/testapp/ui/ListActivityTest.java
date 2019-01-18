@@ -33,7 +33,7 @@ public class ListActivityTest
     }
 
     @Test
-    public void TestInitFragment(){
+    public void testInitFragment(){
 
         View view = listActivity.findViewById(R.id.fragmentContainer);
         assertNotNull(view);
@@ -48,7 +48,7 @@ public class ListActivityTest
     }
 
     @Test
-    public void TestTitleUpdate(){
+    public void testTitleUpdate(){
 
         listActivity.runOnUiThread(new Runnable()
         {

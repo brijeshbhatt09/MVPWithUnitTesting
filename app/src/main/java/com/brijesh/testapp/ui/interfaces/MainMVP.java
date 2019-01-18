@@ -12,7 +12,7 @@ public interface MainMVP
 {
     interface View extends BaseMVP.View
     {
-        void updateResponse(ViewResponse viewResponse);
+        void updateViewOnResponse(ViewResponse viewResponse);
     }
 
     interface Presenter<T extends MainMVP.View> extends BaseMVP.Presenter<T>

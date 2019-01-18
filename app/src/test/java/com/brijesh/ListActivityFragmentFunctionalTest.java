@@ -26,7 +26,7 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 /**
- * Created by Brijesh.Bhatt on 16/12/18.
+ * Created by ${Brijesh.Bhatt} on 16/01/18.
  */
 @RunWith(RobolectricTestRunner.class)
 @Config(manifest=Config.NONE)
@@ -61,7 +61,7 @@ public class ListActivityFragmentFunctionalTest
     }
 
     @Test
-    public void showUpdateResponseSuccessfull() throws Exception
+    public void updateViewOnResponse_Successfull()
     {
         ViewResponse viewResponse = Mockito.mock(ViewResponse.class);
         List<Rows> rows = new ArrayList<>();
@@ -69,22 +69,22 @@ public class ListActivityFragmentFunctionalTest
         rows.add(new Rows());
         rows.add(new Rows());
         Mockito.doReturn(rows).when(viewResponse).getRows();
-        listActivityFragment.updateResponse(viewResponse);
+        listActivityFragment.updateViewOnResponse(viewResponse);
         Assert.assertSame(errorMessage.getVisibility(), View.GONE);
     }
 
     @Test
-    public void showUpdateResponseWithError() throws Exception
+    public void updateViewOnResponse_Null()
     {
         ViewResponse viewResponse = Mockito.mock(ViewResponse.class);
         Mockito.doReturn(null).when(viewResponse).getRows();
-        listActivityFragment.updateResponse(viewResponse);
+        listActivityFragment.updateViewOnResponse(viewResponse);
         Assert.assertSame(errorMessage.getVisibility(), View.VISIBLE);
         Assert.assertEquals(errorMessage.getText(), listActivityFragment.getResources().getString(R.string.no_items));
     }
 
     @Test
-    public void checkNetworkWhenOnline()
+    public void checkNetwork_Online()
     {
         NetworkCheck networkCheck = Mockito.mock(NetworkCheck.class);
         when(networkCheck.isOnline()).thenReturn(true);
@@ -93,7 +93,7 @@ public class ListActivityFragmentFunctionalTest
     }
 
     @Test
-    public void checkNetworkWhenOffline()
+    public void checkNetwork_Offline()
     {
         NetworkCheck networkCheck = Mockito.mock(NetworkCheck.class);
         when(networkCheck.isOnline()).thenReturn(false);
