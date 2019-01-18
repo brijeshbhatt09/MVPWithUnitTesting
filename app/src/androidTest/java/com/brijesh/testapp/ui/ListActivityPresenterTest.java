@@ -37,6 +37,9 @@ import static org.mockito.Mockito.times;
 /**
  * Created by ${Brijesh.Bhatt} on 11/12/18.
  */
+
+/*Required Device or emulator with active window{unlocked}*/
+
 @RunWith(MockitoJUnitRunner.class)
 public class ListActivityPresenterTest {
 

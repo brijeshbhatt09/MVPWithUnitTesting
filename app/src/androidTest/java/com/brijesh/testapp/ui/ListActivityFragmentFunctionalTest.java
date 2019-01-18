@@ -27,6 +27,9 @@ import static org.mockito.Mockito.when;
 /**
  * Created by ${Brijesh.Bhatt} on 05/01/19.
  */
+
+/*Required Device or emulator with active window{unlocked}*/
+
 @RunWith(MockitoJUnitRunner.class)
 public class ListActivityFragmentFunctionalTest
 {
